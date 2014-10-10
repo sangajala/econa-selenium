@@ -23,6 +23,7 @@ Feature: Search
 #    Then I should see "Behavior-Driven Development"
 
 
+
   @22@23@ram@new
   Scenario Outline: User selects the voucher and opens the title from image
 
@@ -55,3 +56,14 @@ Feature: Search
     |test@||
     |test@2||
     |test@test.com|Success|
+
+  @new
+  Scenario Outline: All search engine robots can read files in my domain
+
+     When SE robots enters the <url>
+     Then Then google robot can access the file with<url>
+      And file content<file_text> should be shown in the screen
+
+  Examples:
+    |url                           | file_text |
+    |"www.sparwelt.de/sitemap.xml" | "http://www.sitemaps.org/schemas/sitemap/0.9" |
