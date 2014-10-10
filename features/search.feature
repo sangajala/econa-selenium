@@ -40,7 +40,7 @@ Feature: Search
     |User_selected_option|
     |Title               |
     |Image               |
-    |voucher button     |
+    |voucher button      |
 
   @26@27
   Scenario Outline: User a valid user perform news letter enrollment
