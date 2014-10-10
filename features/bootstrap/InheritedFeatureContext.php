@@ -98,7 +98,10 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
         $response_code = substr($headers[0], 9, 3);
         echo $response_code;
         \PHPUnit_Framework_Assert::assertEquals(200,$response_code);
-        //$this->assertSession()->responseContains($response_code);
+
+        //the below command also checks for the status code, But that fucntion is not being supported by the
+        //Behat\Mink\Driver\Selenium2Driver
+        // $this->assertSession()->statusCodeEquals(200);
     }
 
     /**
@@ -108,6 +111,12 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
     {
         $page_content = $this->getSession()->getPage()->getContent();
         \PHPUnit_Framework_Assert::assertContains($arg1,$page_content);
+
+        //another way to achieve the same assertion through Behat Mink function
+        //This did not work. it internally looks for the element with xpath "//html"
+        //and takes the page content and check for the presence of string passed as its argument
+        //Our pages sitemap.xml and robot.txt too have have //html, but not sure why it does not work
+        //$this->assertSession()->pageTextContains($this->fixStepArgument($arg1));
     }
 
 

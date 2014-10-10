@@ -13,7 +13,7 @@ Feature: SiteMap.xml and Robot.txt SEO tests
   Examples:
     |url                                  | filetext                                      |
     |"http://www.sparwelt.de/sitemap.xml" | "http://www.sitemaps.org/schemas/sitemap/0.9" |
-    |"http://www.sparwelt.de/robots.txt"   | "User-agent: *"                               |
+    |"http://www.sparwelt.de/robots.txt"  | "User-agent: *"                               |
 
 
 
