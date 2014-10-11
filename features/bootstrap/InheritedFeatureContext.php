@@ -2,7 +2,7 @@
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\MinkExtension\Context\MinkContext;
 //require_once 'PHPUnit/Framework/Assert/Functions.php';
-//require_once 'PHPUnit/Autoload.php';
+//require_once 'PHPUnit/Autoload.php';///
 //require_once 'vendor/autoload.php';
 
 //use Behat\Behat\Context\ClosuredContextInterface,
@@ -23,6 +23,44 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
     }
 
 
+    /**
+     * @Given /^Google Robot is in Home Page$/
+     */
+    public function googleRobotIsInHomePage()
+    {
+        $this->visit("/");
+    }
+
+    /**
+     * @When /^I opens sitemap\.xml from "([^"]*)"$/
+     */
+    public function iOpensSitemapXmlFrom($url)
+    {
+
+        $this->visit("/sitemap.xml");
+
+    }
+
+    /**
+     * @Then /^I should receive "([^"]*)" response$/
+     */
+    public function iShouldGetReceiveReponse($expected_response_code)
+    {
+
+        echo $this->getSession()->getCurrentUrl();
+        $headers = get_headers($this->getSession()->getCurrentUrl());
+        $response_code = substr($headers[0], 9, 3);
+        PHPUnit_Framework_Assert::assertEquals($expected_response_code,$response_code,"Asserting the response code should be 200");
+    }
+
+    /**
+     * @Given /^I should see text as "([^"]*)"$/
+     */
+    public function iShouldSeeTextAs($text)
+    {
+        $page_content = $this->getSession()->getPage()->getContent();
+        PHPUnit_Framework_Assert::assertContains($text,$page_content);
+    }
     /**
      * @Given /^user selected a random vendor with name \'([^\']*)\' from \'([^\']*)\' menu$/
      */
@@ -110,7 +148,7 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
     public function fileContentShouldBeShownInTheScreen($arg1)
     {
         $page_content = $this->getSession()->getPage()->getContent();
-        \PHPUnit_Framework_Assert::assertContains($arg1,$page_content);
+        PHPUnit_Framework_Assert::assertContains($arg1,$page_content);
 
         //another way to achieve the same assertion through Behat Mink function
         //This did not work. it internally looks for the element with xpath "//html"
