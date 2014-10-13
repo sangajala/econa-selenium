@@ -22,9 +22,7 @@ Feature: Search
 #    And I wait for the suggestion box to appear
 #    Then I should see "Behavior-Driven Development"
 
-
-
-  @22@23@ram@new
+  @22@23@ram
   Scenario Outline: User selects the voucher and opens the title from image
 
     Given user selected a random vendor with name 'Amazon' from 'Gutscheine' menu
@@ -43,7 +41,7 @@ Feature: Search
     |voucher button      |
 
   @26@27
-  Scenario Outline: User a valid user perform news letter enrollment
+  Scenario Outline: valid user perform news letter enrollment
 
     Given user is in homepage
     When enters for newsletter enrollment with email as '<email>'
@@ -57,13 +55,3 @@ Feature: Search
     |test@2||
     |test@test.com|Success|
 
-  @new
-  Scenario Outline: All search engine robots can read files in my domain
-
-     When SE robots enters the <url>
-     Then Then google robot can access the file with<url>
-      And file content<file_text> should be shown in the screen
-
-  Examples:
-    |url                           | file_text |
-    |"www.sparwelt.de/sitemap.xml" | "http://www.sitemaps.org/schemas/sitemap/0.9" |

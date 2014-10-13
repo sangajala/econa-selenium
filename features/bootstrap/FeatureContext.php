@@ -12,8 +12,9 @@ use Behat\MinkExtension\Context\MinkContext;
 //use Behat\Gherkin\Node\PyStringNode,
 //    Behat\Gherkin\Node\TableNode;
 
-class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
+class FeatureContext extends Behat\MinkExtension\Context\MinkContext
 {
+
     /**
      * @Then /^I wait for the suggestion box to appear$/
      */
@@ -32,12 +33,14 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
     }
 
     /**
-     * @When /^I opens sitemap\.xml from "([^"]*)"$/
+     * @When /^I opens "([^"]*)" from "([^"]*)"$/
      */
-    public function iOpensSitemapXmlFrom($url)
+    public function iOpensSitemapXmlFrom($file,$page)
     {
 
-        $this->visit("/sitemap.xml");
+
+        $this->visit("/".$file);
+        sleep(10);
 
     }
 
@@ -46,8 +49,6 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
      */
     public function iShouldGetReceiveReponse($expected_response_code)
     {
-
-        echo $this->getSession()->getCurrentUrl();
         $headers = get_headers($this->getSession()->getCurrentUrl());
         $response_code = substr($headers[0], 9, 3);
         PHPUnit_Framework_Assert::assertEquals($expected_response_code,$response_code,"Asserting the response code should be 200");
@@ -61,6 +62,27 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
         $page_content = $this->getSession()->getPage()->getContent();
         PHPUnit_Framework_Assert::assertContains($text,$page_content);
     }
+
+    /**
+     * @Then /^I should see the below text$/
+     */
+    public function iShouldSeeListOfText(\Behat\Gherkin\Node\TableNode $tableNode)
+    {
+        foreach ($tableNode ->getHash() as $userHash) {
+
+            $page_content = $this->getSession()->getPage()->getContent();
+            PHPUnit_Framework_Assert::assertContains($userHash['Text'],$page_content);
+        }
+    }
+    /**
+     * @Then /^I should see the element as "([^"]*)"$/
+     */
+    public function checkTheElement($element)
+    {
+        PHPUnit_Framework_Assert::assertTrue($this->getSession()->getPage()->has('xpath',"//meta[@name='robots' and @content='index, follow']"));
+    }
+
+
     /**
      * @Given /^user selected a random vendor with name \'([^\']*)\' from \'([^\']*)\' menu$/
      */
@@ -161,44 +183,50 @@ class InheritedFeatureContext extends Behat\MinkExtension\Context\MinkContext
 
 
 
+    /**
+     * Take screenshot when step fails.
+     * Works only with Selenium2Driver.
+     *
+     * @AfterStep
+     * @param $event
+     */
+    public function takeScreenshotAfterFailedStep($event)
+    {
+        if (4 === $event->getResult()) {
+//            $driver = $this->getSession()->getDriver();
+////            if (!($driver instanceof Selenium2Driver)) {
+////                //throw new UnsupportedDriverActionException('Taking screenshots is not supported by %s, use Selenium2Driver instead.', $driver);
+////                return;
+////            }return
+//
+//            $screenshot = $driver->getScreenshot();
+//            chdir(dirname(__FILE__));
+//            chdir("../../temp");
+//            file_put_contents(gettimeofday("sec").'_test.png', $screenshot);
+//        }
 
+            if ($this->getSession()->getDriver() instanceof
+                \Behat\Mink\Driver\Selenium2Driver
+            ) {
+                $stepText = $event->getStep()->getText();
+                $fileTitle = preg_replace("#[^a-zA-Z0-9\._-]#", '', $stepText);
+                chdir(dirname(__FILE__));
+                chdir("../../temp");
+                $fileName = $fileTitle . '.png';
+                $screenshot = $this->getSession()->getDriver()->getScreenshot();
+                file_put_contents($fileName, $screenshot);
+                print "\n";
+                echo "\n";
+                print getenv("Url");
+                print "                                \n";
+                print "\nScreenshot for '{$stepText}' placed in \n";
+                print "<br><a href='/econa-selenium/temp/$fileName'>Link</a></br>";
+                print "                                \n";
+                print "\n";
+                echo "\n";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            }}
+    }
 
 
 
